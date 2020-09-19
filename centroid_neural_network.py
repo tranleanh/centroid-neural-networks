@@ -11,6 +11,7 @@
 #
 #================================================================
 
+from matplotlib import pyplot as plt
 import numpy as np
 
 def remove_element(L,arr):
@@ -70,7 +71,7 @@ def centroid_neural_net(input_data, n_clusters, max_iteration = 10, epsilon = 0.
 
         cluster_lengths[index] += 1
 
-    cluster_elements = np.array(cluster_elements)
+    # cluster_elements = np.array(cluster_elements)  
 
     centroids = []
     for elements in cluster_elements:
@@ -109,10 +110,11 @@ def centroid_neural_net(input_data, n_clusters, max_iteration = 10, epsilon = 0.
                 # update loser neuron
                 w[previous_cluster_index] = w[previous_cluster_index] - (x - w[previous_cluster_index])/(cluster_lengths[previous_cluster_index]-1)
 
-                # append and remove data to cluster
+                # add and remove data to cluster    
+                cluster_elements[current_cluster_index] = list(cluster_elements[current_cluster_index])
                 cluster_elements[current_cluster_index].append(x)
-                remove_element(cluster_elements[previous_cluster_index], x) 
-
+                remove_element(cluster_elements[previous_cluster_index], x)  
+    
                 # update cluster index
                 cluster_indices[x_th] = current_cluster_index
 
@@ -121,12 +123,12 @@ def centroid_neural_net(input_data, n_clusters, max_iteration = 10, epsilon = 0.
 
                 loser += 1
 
-        cluster_elements = np.array(cluster_elements)
+        # cluster_elements = np.array(cluster_elements)
 
         centroids = []
         for elements in cluster_elements:
             elements = np.array(elements)
-            centroid_i = (np.average(elements[:,0]), np.average(elements[:,1]))
+            centroid_i = [np.average(elements[:,0]), np.average(elements[:,1])]
             centroids.append(centroid_i)
 
         if loser == 0: 
@@ -154,10 +156,11 @@ def centroid_neural_net(input_data, n_clusters, max_iteration = 10, epsilon = 0.
                 w.append(new_w)
 
                 new_cluster_thing = []
+                new_cluster_thing = np.array(new_cluster_thing)
 
-                cluster_elements = list(cluster_elements)
+                # cluster_elements = list(cluster_elements)
                 cluster_elements.append(new_cluster_thing)
-                cluster_elements = np.array(cluster_elements)
+                # cluster_elements = np.array(cluster_elements)
 
                 cluster_lengths = list(cluster_lengths)
                 cluster_lengths.append(0)
