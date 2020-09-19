@@ -2,10 +2,6 @@
 
 ## 1. Centroid Neural Network
 
-Input:
+Input - Output:
 
-![picture](images/data_gen.png)
-
-Output:
-
-![picture](images/centroid_neural_net_result.png)
+![picture](images/sample1.png)
