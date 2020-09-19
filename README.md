@@ -1,6 +1,6 @@
-# Implementation of Clustering Algorithms
+# Centroid Neural Network for Unsupervised Competitive Learning
 
-## 1. Centroid Neural Network
+## Centroid Neural Network
 
 Input - Output:
 
