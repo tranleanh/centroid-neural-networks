@@ -11,7 +11,6 @@
 #
 #================================================================
 
-from matplotlib import pyplot as plt
 import numpy as np
 
 def remove_element(L,arr):
