@@ -1,6 +1,6 @@
-# Centroid Neural Network for Unsupervised Competitive Learning
+## Centroid Neural Network for Unsupervised Competitive Learning
 
-## Centroid Neural Network
+Paper: [Centroid Neural Network for Unsupervised Competitive Learning](https://ieeexplore.ieee.org/document/839021)
 
 Input - Output:
 
