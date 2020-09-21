@@ -1,4 +1,4 @@
-## Centroid Neural Network for Unsupervised Competitive Learning
+## Centroid Neural Networks for Unsupervised Competitive Learning
 
 ### 1. Introduction
 
@@ -10,9 +10,15 @@ Input - Output:
 
 ### 2. How to run
 
+#### 2.1 Centroid Neural Network
+
 - functions: [centroid_neural_network.py](https://github.com/tranleanh/Centroid-Neural-Network/blob/master/centroid_neural_network.py)
 
 - notebook run: [test_cnn_subroutines.ipynb](https://github.com/tranleanh/Centroid-Neural-Network/blob/master/test_cnn_subroutines.ipynb)
+
+#### 2.2 General Centroid Neural Network
+
+- loading...
 
 Sept. 2020
 
