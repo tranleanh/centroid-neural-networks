@@ -183,7 +183,7 @@ def centroid_neural_network(X, n_clusters=10, max_iteration = 100, epsilon=0.05)
 
 
 # Centroid Neural Networks with Detected Weights
-def centroid_neural_net_detected_weights(input_data, detected_weights, n_clusters, epochs = 10):
+def centroid_neural_network_detected_weights(input_data, detected_weights, n_clusters, epochs = 10):
     X = input_data
     w = detected_weights
     initial_clusters = len(w)
@@ -273,7 +273,7 @@ def centroid_neural_net_detected_weights(input_data, detected_weights, n_cluster
         print(epoch+1, len(centroids))
 
         if loser == 0: 
-            if len(w) == k:
+            if len(w) == n_clusters:
                 print("Reach the Desired Number of Clusters. Stop at Epoch ", epoch+1)
                 break
 
@@ -308,7 +308,7 @@ def centroid_neural_net_detected_weights(input_data, detected_weights, n_cluster
 
 
 # G-CNN
-def g_centroid_neural_net(input_data, num_clusters, num_subdata = 10, max_iteration = 50, epsilon = 0.05):
+def g_centroid_neural_network(input_data, num_clusters, num_subdata = 10, max_iteration = 50, epsilon = 0.05):
 
     X = input_data
     new_data = []
@@ -329,7 +329,7 @@ def g_centroid_neural_net(input_data, num_clusters, num_subdata = 10, max_iterat
     for i in range(len(new_data)):
         subdata_i = new_data[i]
 
-        centroids_, w_, cluster_indices_, cluster_elements_ = centroid_neural_net(subdata_i, num_clusters, max_iteration, epsilon)
+        centroids_, w_, cluster_indices_, cluster_elements_ = centroid_neural_network(subdata_i, num_clusters, max_iteration, epsilon)
 
         centroids.append(centroids_)
         w.append(w_)
@@ -345,11 +345,11 @@ def g_centroid_neural_net(input_data, num_clusters, num_subdata = 10, max_iterat
     gen2_data = np.array(gen2_data)
 
     # Run G-CNN one more time
-    centroids_2, w_2, cluster_indices_2, cluster_elements_2 = centroid_neural_net(gen2_data, num_clusters, max_iteration, epsilon)
+    centroids_2, w_2, cluster_indices_2, cluster_elements_2 = centroid_neural_network(gen2_data, num_clusters, max_iteration, epsilon)
 
     # Run G-CNN last time
     detected_weights = centroids_2
-    centroids, weights, cluster_indices, cluster_elements = centroid_neural_net_detected_weights(X, detected_weights, max_iteration)
+    centroids, weights, cluster_indices, cluster_elements = centroid_neural_network_detected_weights(X, detected_weights, num_clusters, max_iteration)
     print("Reach the Desired Number of Clusters. Stop!")
     
     return centroids, weights, cluster_indices, cluster_elements
@@ -357,7 +357,7 @@ def g_centroid_neural_net(input_data, num_clusters, num_subdata = 10, max_iterat
 
 
 # G-CNN v2
-def g_centroid_neural_net_2(input_data, num_clusters, num_subdata = 10, max_iteration = 50, epsilon = 0.05):
+def g_centroid_neural_network_2(input_data, num_clusters, num_subdata = 10, max_iteration = 50, epsilon = 0.05):
 
     X = input_data
     new_data = []
@@ -379,11 +379,11 @@ def g_centroid_neural_net_2(input_data, num_clusters, num_subdata = 10, max_iter
         subdata_i = new_data[i]
 
         if i == 0:
-            centroids_, w_, cluster_indices_, cluster_elements_ = centroid_neural_net(subdata_i, num_clusters, max_iteration, epsilon)
+            centroids_, w_, cluster_indices_, cluster_elements_ = centroid_neural_network(subdata_i, num_clusters, max_iteration, epsilon)
 
         else:
             detected_weights = w[0]
-            centroids_, w_, cluster_indices_, cluster_elements_ = centroid_neural_net_detected_weights(subdata_i, detected_weights, max_iteration)
+            centroids_, w_, cluster_indices_, cluster_elements_ = centroid_neural_network_detected_weights(subdata_i, detected_weights, num_clusters,max_iteration)
 
         centroids.append(centroids_)
         w.append(w_)
@@ -398,11 +398,36 @@ def g_centroid_neural_net_2(input_data, num_clusters, num_subdata = 10, max_iter
 
     gen2_data = np.array(gen2_data)
 
-    centroids_2, w_2, cluster_indices_2, cluster_elements_2 = centroid_neural_net(gen2_data, num_clusters, max_iteration, epsilon)
+    centroids_2, w_2, cluster_indices_2, cluster_elements_2 = centroid_neural_network(gen2_data, num_clusters, max_iteration, epsilon)
 
     # Run G-CNN one more time
     detected_weights = centroids_2
-    centroids, weights, cluster_indices, cluster_elements = centroid_neural_net_detected_weights(X, detected_weights, max_iteration)
+    centroids, weights, cluster_indices, cluster_elements = centroid_neural_network_detected_weights(X, detected_weights, num_clusters, max_iteration)
     print("Reach the Desired Number of Clusters. Stop!")
     
     return centroids, weights, cluster_indices, cluster_elements
+
+
+def plot_cnn_result(input_data, centroids, cluster_indices, figure_size=(8,8)):
+
+    X = input_data
+    num_clusters = len(centroids)
+
+    plt.figure(figsize=figure_size)
+
+    cnn_cluster_elements = []
+
+    for i in range(num_clusters):
+        display = []
+        for x_th in range(len(X)):
+            if cluster_indices[x_th] == i:
+                display.append(X[x_th])
+
+        cnn_cluster_elements.append(display)
+
+        display = np.array(display)
+        plt.scatter(display[:,0], display[:,1])
+        plt.scatter(centroids[i][0], centroids[i][1], s=200, c='red')
+        plt.text(centroids[i][0], centroids[i][1], f"Cluster {i}", fontsize=14)        
+
+    plt.show()
