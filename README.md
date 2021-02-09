@@ -16,7 +16,7 @@ Input - Output:
 
 - notebook run: [test_cnn_subroutines.ipynb](https://github.com/tranleanh/Centroid-Neural-Network/blob/master/test_cnn_subroutines.ipynb)
 
-#### 2.2 General Centroid Neural Network
+#### 2.2 G - Centroid Neural Network
 
 - loading...
 
