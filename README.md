@@ -8,6 +8,10 @@ Input - Output:
 
 ![picture](images/sample1.png)
 
+Clustering Process:
+
+![picture](images/cnn_result_gif_delay.gif)
+
 ### 2. How to run
 
 #### 2.1 Centroid Neural Network
