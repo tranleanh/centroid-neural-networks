@@ -1,17 +1,16 @@
 #================================================================
 #
-#   Copyright (C) 2020 Tran Le Anh
+#   Copyright (C) 2024 Tran Le Anh
 #
-#   Editor      : Sublime Text
 #   Application : Centroid Neural Networks
 #   Author      : tranleanh
-#   Created date: 2020-09-21 13:00
-#   Description : Public
-#   Version     : 2.0
+#   Version     : 3.0.0
 #
 #================================================================
 
 import numpy as np
+from scipy.spatial.distance import cdist
+
 
 def remove_element(L,arr):
     ind = 0
@@ -23,150 +22,105 @@ def remove_element(L,arr):
     else:
         raise ValueError('array not found in list.')
 
-# Centroid Neural Networks
-def centroid_neural_net(input_data, n_clusters, max_iteration = 10, epsilon = 0.05):
-    X = input_data
-    centroid_X = (np.average(X[:,0]), np.average(X[:,1]))
-    
-    w1 = [centroid_X[0] + epsilon, centroid_X[1] + epsilon]
-    w2 = [centroid_X[0] - epsilon, centroid_X[1] - epsilon]
 
-    w = []
-    w.append(w1)
-    w.append(w2)
+
+# Centroid Neural Networks
+def centroid_neural_net(X, n_clusters, max_iteration = 100, epsilon = 0.05):
+
+    centroid_X = np.mean(X, axis=0)
+
+    w = [centroid_X + epsilon, centroid_X - epsilon]
     
     ########## EPOCH 0 ##########
-    initial_clusters = 2
-
-    cluster_elements = []
-    for cluster in range(initial_clusters):
-        cluster_i = []
-        cluster_elements.append(cluster_i)
-
-    cluster_lengths = np.zeros(initial_clusters, dtype=int)
+    cluster_members = [[], []]
 
     cluster_indices = []
 
-    for i in range(len(X)):
-        x = X[i]
+    for i, x in enumerate(X):
 
-        distances = []
-        for w_i in w:
-            dist = (x[0]-w_i[0])**2 + (x[1]-w_i[1])**2
-            distances.append(dist)
+        distances = cdist([x], w ,'euclidean')[0]
 
         # find winner neuron
-        index = distances.index(min(distances))
+        index = np.argmin(distances)
 
         # add cluster index of data x to a list
         cluster_indices.append(index)
 
         # update winner neuron
-        w[index] = w[index] + 1/(1+cluster_lengths[index])*(x - w[index])
+        w[index] = w[index] + 1/(1+len(cluster_members[index]))*(x - w[index])
 
         # append data to cluster
-        cluster_elements[index].append(x)
+        cluster_members[index].append(x)
 
-        cluster_lengths[index] += 1
-
-    centroids = []
-    for elements in cluster_elements:
-        elements = np.array(elements)
-        centroid_i = (np.average(elements[:,0]), np.average(elements[:,1]))
-        centroids.append(centroid_i)
         
     ########## EPOCH 1+ - INCREASE NUM OF CLUSERS ##########
     num_of_all_clusters = n_clusters
-    epochs = max_iteration
 
-    for epoch in range(epochs):
+    for epoch in range(max_iteration):
         loser = 0
 
         for i in range(len(X)):
             x = X[i]
 
-            distances = []
-            for w_i in w:
-                dist = (x[0]-w_i[0])**2 + (x[1]-w_i[1])**2
-                distances.append(dist)
+            distances = cdist([x], w ,'euclidean')[0]
 
             # find winner neuron of x
-            current_cluster_index = distances.index(min(distances))
+            current_cluster_index = np.argmin(distances)
 
             # what was the winner for x in previous epoch
             x_th = i
             previous_cluster_index = cluster_indices[x_th]
 
             # check if current neuron is a loser
-            if previous_cluster_index != current_cluster_index:
+            if previous_cluster_index != current_cluster_index: 
                 # update winner neuron
-                w[current_cluster_index] = w[current_cluster_index] + (x - w[current_cluster_index])/(cluster_lengths[current_cluster_index]+1)
+                w[current_cluster_index] = w[current_cluster_index] + (x - w[current_cluster_index])/(len(cluster_members[current_cluster_index])+1)
 
                 # update loser neuron
-                w[previous_cluster_index] = w[previous_cluster_index] - (x - w[previous_cluster_index])/(cluster_lengths[previous_cluster_index]-1)
+                w[previous_cluster_index] = w[previous_cluster_index] - (x - w[previous_cluster_index])/(len(cluster_members[previous_cluster_index])-1)
 
                 # add and remove data to cluster    
-                cluster_elements[current_cluster_index] = list(cluster_elements[current_cluster_index])
-                cluster_elements[current_cluster_index].append(x)
-                remove_element(cluster_elements[previous_cluster_index], x)  
+                cluster_members[current_cluster_index] = list(cluster_members[current_cluster_index])
+                cluster_members[current_cluster_index].append(x)
+                remove_element(cluster_members[previous_cluster_index], x)  
     
                 # update cluster index
                 cluster_indices[x_th] = current_cluster_index
 
-                cluster_lengths[current_cluster_index] += 1
-                cluster_lengths[previous_cluster_index] -= 1
-
                 loser += 1
-
-        centroids = []
-        for elements in cluster_elements:
-            elements = np.array(elements)
-            centroid_i = [np.average(elements[:,0]), np.average(elements[:,1])]
-            centroids.append(centroid_i)
 
         if loser == 0: 
             if len(w) == num_of_all_clusters:
-                print("Reach the Desired Number of Clusters. Stop at Epoch ", epoch+1)
+                # print("Reach the Desired Number of Clusters. Stop at Epoch ", epoch+1)
                 break
 
             else:
                 all_error = []
                 for i in range(len(w)):
 
-                    # calculate error
-                    error = 0
-                    for x in cluster_elements[i]:
-                        error += np.sqrt((x[0] - w[i][0])**2 + (x[1] - w[i][1])**2)
-
+                    dists = cdist([w[i]], cluster_members[i] ,'euclidean')[0]
+                    error = np.sum(dists)
                     all_error.append(error)
 
-                splitted_index = all_error.index(max(all_error))
-
-                new_w = [w[splitted_index][0] + epsilon, w[splitted_index][1] + epsilon]
+                new_w = w[np.argmax(all_error)] + epsilon
                 w.append(new_w)
 
-                new_cluster_thing = []
-                new_cluster_thing = np.array(new_cluster_thing)
-
-                cluster_elements.append(new_cluster_thing)
-
-                cluster_lengths = list(cluster_lengths)
-                cluster_lengths.append(0)
-                cluster_lengths = np.array(cluster_lengths)
+                cluster_members.append(np.array([]))
     
-    return centroids, w, cluster_indices, cluster_elements
+    return np.array(w), cluster_indices
+    
 
-# Centroid Neural Networks with Detected Weights
-def centroid_neural_net_detected_weights(input_data, detected_weights, max_iteration = 10):
-    X = input_data
-    w = detected_weights
+
+# Centroid Neural Networks with Initialized Weights
+def centroid_neural_net_init_weights(X, init_weights, max_iteration = 100):
+
+    w = init_weights
     initial_clusters = len(w)
-    epochs = max_iteration
 
-    cluster_elements = []
+    cluster_members = []
     for cluster in range(initial_clusters):
         cluster_i = []
-        cluster_elements.append(cluster_i)
+        cluster_members.append(cluster_i)
 
     cluster_lengths = np.zeros(initial_clusters, dtype=int)
     cluster_indices = []
@@ -174,13 +128,10 @@ def centroid_neural_net_detected_weights(input_data, detected_weights, max_itera
     for i in range(len(X)):
         x = X[i]
 
-        distances = []
-        for w_i in w:
-            dist = (x[0]-w_i[0])**2 + (x[1]-w_i[1])**2
-            distances.append(dist)
+        distances = cdist([x], w ,'euclidean')[0]
 
         # find winner neuron
-        index = distances.index(min(distances))
+        index = np.argmin(distances)
 
         # add cluster index of data x to a list
         cluster_indices.append(index)
@@ -189,62 +140,46 @@ def centroid_neural_net_detected_weights(input_data, detected_weights, max_itera
         w[index] = w[index] + 1/(1+cluster_lengths[index])*(x - w[index])
 
         # append data to cluster
-        cluster_elements[index].append(x)
+        cluster_members[index].append(x)
 
         cluster_lengths[index] += 1
 
-    centroids = []
-    for elements in cluster_elements:
-        elements = np.array(elements)
-        centroid_i = (np.average(elements[:,0]), np.average(elements[:,1]))
-        centroids.append(centroid_i)
 
-    for epoch in range(epochs):
+    for epoch in range(max_iteration):
         loser = 0
 
         for i in range(len(X)):
             x = X[i]
 
-            distances = []
-            for w_i in w:
-                dist = (x[0]-w_i[0])**2 + (x[1]-w_i[1])**2
-                distances.append(dist)
+            distances = cdist([x], w ,'euclidean')[0]
 
             # find winner neuron of x
-            current_cluster_index = distances.index(min(distances))
+            current_cluster_index = np.argmin(distances)
 
             # what was the winner for x in previous epoch
             x_th = i
             previous_cluster_index = cluster_indices[x_th]
 
             # check if current neuron is a loser
-            if previous_cluster_index != current_cluster_index:
+            if previous_cluster_index != current_cluster_index: 
                 # update winner neuron
-                w[current_cluster_index] = w[current_cluster_index] + (x - w[current_cluster_index])/(cluster_lengths[current_cluster_index]+1)
+                w[current_cluster_index] = w[current_cluster_index] + (x - w[current_cluster_index])/(len(cluster_members[current_cluster_index])+1)
 
                 # update loser neuron
-                w[previous_cluster_index] = w[previous_cluster_index] - (x - w[previous_cluster_index])/(cluster_lengths[previous_cluster_index]-1)
+                w[previous_cluster_index] = w[previous_cluster_index] - (x - w[previous_cluster_index])/(len(cluster_members[previous_cluster_index])-1)
 
                 # add and remove data to cluster    
-                cluster_elements[current_cluster_index] = list(cluster_elements[current_cluster_index])
-                cluster_elements[current_cluster_index].append(x)
-                remove_element(cluster_elements[previous_cluster_index], x)  
-
+                cluster_members[current_cluster_index] = list(cluster_members[current_cluster_index])
+                cluster_members[current_cluster_index].append(x)
+                remove_element(cluster_members[previous_cluster_index], x)  
+    
                 # update cluster index
                 cluster_indices[x_th] = current_cluster_index
 
-                cluster_lengths[current_cluster_index] += 1
-                cluster_lengths[previous_cluster_index] -= 1
-
                 loser += 1
-
-        centroids = []
-        for elements in cluster_elements:
-            elements = np.array(elements)
-            centroid_i = [np.average(elements[:,0]), np.average(elements[:,1])]
-            centroids.append(centroid_i)
 
         if loser == 0: 
             print("Stop at Epoch ", epoch+1)
             break
-    return centroids, w, cluster_indices, cluster_elements
+
+    return np.array(w), cluster_indices
