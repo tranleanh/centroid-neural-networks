@@ -1,31 +1,51 @@
-## Centroid Neural Networks for Unsupervised Competitive Learning
+# Centroid Neural Networks for Unsupervised Competitive Learning
 
-### 1. Introduction
+[![Paper](https://img.shields.io/badge/Paper-IEEE-blue)](https://ieeexplore.ieee.org/document/839021)
+[![Blog](https://img.shields.io/badge/Blog-Towards_AI-blue)](https://towardsai.net/p/l/centroid-neural-network-an-efficient-and-stable-clustering-algorithm)
 
-Paper: [Centroid Neural Network for Unsupervised Competitive Learning](https://ieeexplore.ieee.org/document/839021)
+Implementation of the Centroid Neural Network algorithm.
 
-Input - Output:
+## Introduction
 
-![picture](images/sample1.png)
+### Algorithm
 
-Clustering Process:
+<p align="center">
+<img src="docs/centnn_algorithm.png" width="800">
+</p>
 
-![picture](images/cnn_result_gif_delay.gif)
+### Clustering Process
 
-### 2. How to run
+<p align="center">
+<img src="docs/cnn_result_gif_delay.gif" width="600">
+</p>
 
-#### 2.1 Centroid Neural Network
+## Demo
 
-- functions: [centroid_neural_network.py](https://github.com/tranleanh/Centroid-Neural-Network/blob/master/centroid_neural_network.py)
+### Centroid Neural Network
 
-- notebook run: [test_cnn_subroutines.ipynb](https://github.com/tranleanh/Centroid-Neural-Network/blob/master/test_cnn_subroutines.ipynb)
+```
+python test_centnn.py
+```
 
-- notebook with plots: [centroid_neural_net_plots.ipynb](https://github.com/tranleanh/centroid-neural-networks/blob/master/centroid_neural_net_plots.ipynb)
+### G - Centroid Neural Network
 
-#### 2.2 G - Centroid Neural Network
+(to be updated)
 
-- loading...
+## Citation
 
-Sept. 2020
+```bibtex
+@article{park2000centroid,
+  title={Centroid neural network for unsupervised competitive learning},
+  author={Park, Dong-Chul},
+  journal={IEEE Transactions on Neural Networks},
+  volume={11},
+  number={2},
+  pages={520--528},
+  year={2000},
+  publisher={IEEE}
+}
+```
 
-Tran Le Anh
+Have fun!
+
+LA Tran
