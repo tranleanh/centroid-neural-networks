@@ -10,7 +10,7 @@ Implementation of the Centroid Neural Network algorithm.
 ### Algorithm
 
 <p align="center">
-<img src="docs/centnn_algorithm.png" width="800">
+<img src="docs/centnn_algorithm.png" width="600">
 </p>
 
 ### Clustering Process
