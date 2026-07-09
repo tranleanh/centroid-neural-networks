@@ -1,4 +1,4 @@
-# Centroid Neural Networks for Unsupervised Competitive Learning
+# Centroid Neural Networks
 
 [![Paper](https://img.shields.io/badge/Paper-IEEE-blue)](https://ieeexplore.ieee.org/document/839021)
 [![Blog](https://img.shields.io/badge/Blog-Towards_AI-blue)](https://towardsai.net/p/l/centroid-neural-network-an-efficient-and-stable-clustering-algorithm)
@@ -21,13 +21,15 @@ Implementation of the Centroid Neural Network algorithm.
 
 ## Demo
 
-### Centroid Neural Network
-
-```
+### Centroid Neural Network (CentNN)
+```bash
 python test_centnn.py
 ```
 
-### G - Centroid Neural Network
+### FastCentNN
+```bash
+(to be updated)
+```
 
 (to be updated)
 
