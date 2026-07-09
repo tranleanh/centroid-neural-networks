@@ -1,27 +1,27 @@
-# Centroid Neural Networks
+# CentNN
 
 [![Paper](https://img.shields.io/badge/Paper-IEEE-blue)](https://ieeexplore.ieee.org/document/839021)
 [![Blog](https://img.shields.io/badge/Blog-Towards_AI-blue)](https://towardsai.net/p/l/centroid-neural-network-an-efficient-and-stable-clustering-algorithm)
 
-Implementation of the Centroid Neural Network algorithm.
+The implementations of different variants of the Centroid Neural Network (CentNN) clustering algorithm.
 
 ## Introduction
 
-### Algorithm
+### Original CentNN Pseudocode
 
 <p align="center">
 <img src="docs/centnn_algorithm.png" width="600">
 </p>
 
-### Clustering Process
+### Clustering Process Illustration
 
 <p align="center">
 <img src="docs/cnn_result_gif_delay.gif" width="600">
 </p>
 
-## Demo
+## Variants
 
-### Centroid Neural Network (CentNN)
+### CentNN (Original)
 ```bash
 python test_centnn.py
 ```
