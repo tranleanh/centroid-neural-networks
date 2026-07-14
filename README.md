@@ -24,7 +24,7 @@ The implementations of different variants of the Centroid Neural Network (CentNN
 
 ## Variants
 
-### 💪 CentNN (Original)
+### ⭐ CentNN (Original)
 ```bash
 python test_centnn.py
 ```
