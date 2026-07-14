@@ -1,4 +1,4 @@
-# CentNN
+# CentNN & Variants
 
 [![Paper](https://img.shields.io/badge/Paper-IEEE-blue)](https://ieeexplore.ieee.org/document/839021)
 [![Blog](https://img.shields.io/badge/Blog-Towards_AI-blue)](https://towardsai.net/p/l/centroid-neural-network-an-efficient-and-stable-clustering-algorithm)
@@ -7,13 +7,13 @@ The implementations of different variants of the Centroid Neural Network (CentNN
 
 ## Introduction
 
-### Original CentNN Pseudocode
+### Original CentNN
 
 <p align="center">
 <img src="docs/centnn_algorithm.png" width="600">
 </p>
 
-### Clustering Process Illustration
+### Process Illustration
 
 <p align="center">
 <img src="docs/cnn_result_gif_delay.gif" width="600">
@@ -26,14 +26,7 @@ The implementations of different variants of the Centroid Neural Network (CentNN
 python test_centnn.py
 ```
 
-### FastCentNN
-```bash
-(to be updated)
-```
-
-(to be updated)
-
-## Citation
+#### Citation
 
 ```bibtex
 @article{park2000centroid,
@@ -46,6 +39,20 @@ python test_centnn.py
   year={2000},
   publisher={IEEE}
 }
+```
+
+
+### FastCentNN (Accelerated)
+```bash
+(to be updated)
+```
+
+(to be updated)
+
+#### Citation
+
+```bibtex
+(to be updated)
 ```
 
 Have fun!
