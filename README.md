@@ -44,7 +44,6 @@ python test_centnn.py
 }
 ```
 
-
 ### ⚡ FastCentNN (Accelerated)
 ```bash
 (to be updated)
@@ -55,7 +54,12 @@ python test_centnn.py
 #### Citation
 
 ```bibtex
-(to be updated)
+@article{tran2026fastcentnn,
+  title={FastCentNN: Accelerating Centroid Neural Network with Entropy Proxy},
+  author={Tran, Le-Anh},
+  journal={arXiv preprint arXiv:2607.13613},
+  year={2026}
+}
 ```
 
 Have fun!
