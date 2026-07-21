@@ -10,13 +10,13 @@ The implementations of different variants of the Centroid Neural Network (CentNN
 
 ## Introduction
 
-### Original CentNN
+CentNN is an unsupervised competitive learning algorithm that initializes with two centroids positioned at the global mean of the dataset and iteratively splits and adjusts the centroids until the desired number of clusters is reached.
 
-<p align="center">
+<!-- <p align="center">
 <img src="docs/centnn_algorithm.png" width="600">
 </p>
 
-### Process Illustration
+### Process Illustration -->
 
 <p align="center">
 <img src="docs/cnn_result_gif_delay.gif" width="600">
@@ -49,7 +49,9 @@ python test_CentNN.py
 python test_CentNN_vs_FastCentNN.py
 ```
 
-(to be updated)
+<p align="center">
+<img src="docs/movement_comparison.png" width="600">
+</p>
 
 #### Citation
 
