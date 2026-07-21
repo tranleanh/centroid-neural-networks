@@ -239,6 +239,9 @@ def centroid_neural_net_with_entropy(
 
     When `return_history=True`, history includes:
     - movement_per_epoch
+    - stage_baseline_per_epoch
+    - threshold_per_epoch
+    - stage_baseline_updates
     - split_epochs
     - split_reasons
     """
@@ -257,6 +260,9 @@ def centroid_neural_net_with_entropy(
         if return_history:
             history = {
                 "movement_per_epoch": [0.0],
+                "stage_baseline_per_epoch": [0.0],
+                "threshold_per_epoch": [0.0],
+                "stage_baseline_updates": [],
                 "split_epochs": [],
                 "split_reasons": [],
             }
@@ -271,6 +277,9 @@ def centroid_neural_net_with_entropy(
     counts = np.zeros(2, dtype=int)
 
     movement_per_epoch = []
+    stage_baseline_per_epoch = []
+    threshold_per_epoch = []
+    stage_baseline_updates = []
     split_epochs = []
     split_reasons = []
 
@@ -291,6 +300,12 @@ def centroid_neural_net_with_entropy(
     data_scale = float(np.linalg.norm(np.std(X, axis=0)))
     stage_baseline_floor = max(1e-12, eps * np.sqrt(X.shape[1]), 1e-3 * data_scale)
     stage_baseline = max(moved_epoch0, stage_baseline_floor)
+    if use_relative_threshold:
+        threshold_epoch0 = movement_threshold * stage_baseline
+    else:
+        threshold_epoch0 = movement_threshold
+    stage_baseline_per_epoch.append(stage_baseline)
+    threshold_per_epoch.append(threshold_epoch0)
     low_movement_streak = 0
     epochs_in_stage = 0
 
@@ -332,6 +347,8 @@ def centroid_neural_net_with_entropy(
             threshold_value = movement_threshold * stage_baseline
         else:
             threshold_value = movement_threshold
+        stage_baseline_per_epoch.append(stage_baseline)
+        threshold_per_epoch.append(threshold_value)
 
         if moved <= threshold_value:
             low_movement_streak += 1
@@ -372,7 +389,17 @@ def centroid_neural_net_with_entropy(
                 split_epochs.append(epoch + 1)
                 split_reasons.append(split_reason)
                 # Use post-split perturbation as new stage baseline.
+                baseline_before = stage_baseline
                 stage_baseline = max(split_movement, moved, stage_baseline_floor)
+                stage_baseline_updates.append(
+                    {
+                        "epoch": int(epoch + 1),
+                        "reason": split_reason,
+                        "baseline_before": float(baseline_before),
+                        "baseline_after": float(stage_baseline),
+                        "split_movement": float(split_movement),
+                    }
+                )
                 low_movement_streak = 0
                 epochs_in_stage = 0
                 continue
@@ -383,6 +410,9 @@ def centroid_neural_net_with_entropy(
     if return_history:
         history = {
             "movement_per_epoch": movement_per_epoch,
+            "stage_baseline_per_epoch": stage_baseline_per_epoch,
+            "threshold_per_epoch": threshold_per_epoch,
+            "stage_baseline_updates": stage_baseline_updates,
             "split_epochs": split_epochs,
             "split_reasons": split_reasons,
         }
