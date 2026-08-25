@@ -4,7 +4,7 @@ CentNN:
 [![Paper](https://img.shields.io/badge/Paper-IEEE-blue)](https://ieeexplore.ieee.org/document/839021)
 [![Blog](https://img.shields.io/badge/Blog-Towards_AI-blue)](https://towardsai.net/p/l/centroid-neural-network-an-efficient-and-stable-clustering-algorithm) | 
 FastCentNN:
-[![Preprint](https://img.shields.io/badge/Preprint-arXiv-red)](https://arxiv.org/)
+[![Preprint](https://img.shields.io/badge/Preprint-arXiv-red)](https://arxiv.org/abs/2607.13613)
 
 The implementations of different variants of the Centroid Neural Network (CentNN) clustering algorithm.
 
